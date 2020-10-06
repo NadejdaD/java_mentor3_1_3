@@ -36,8 +36,17 @@ public class AdminController {
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        userService.saveUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User userForm) {
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(userService.getRoleById(1L));
+
+        if (userForm.getRoles().iterator().next().getName().contains("ROLE_ADMIN")) {
+            roleSet.add(userService.getRoleById(2L));
+        } else if (userForm.getRoles().iterator().next().getName().contains("ROLE_USER")) {
+            roleSet.add(userService.getRoleById(1L));
+        }
+        userForm.setRoles(roleSet);
+        userService.saveUser(userForm);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

@@ -37,11 +37,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void saveUser(User user) {
-
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleDao.findById(1L).orElseThrow());
-        user.setRoles(roleSet);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.save(user);
     }

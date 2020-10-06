@@ -48,6 +48,7 @@ function showUsers() {
         method: 'GET',
         url: '/admin/home/',
         success: function (users) {
+            map.clear();
             $.each(users, function (i, user) {
                 map.set(user.id, user);
 
@@ -78,24 +79,26 @@ $(document).ready(function () {
         let updateLastName = map.get(updateId).lastName;
         let updateAge = map.get(updateId).age;
         let updateEmail = map.get(updateId).email;
+        let updatePassword = map.get(updateId).password;
+        let updateRoles = map.get(updateId).roles;
 
         $(".modal-body #idEdit").val(updateId);
         $(".modal-body #firstNameEdit").val(updateFirstName);
         $(".modal-body #lastNameEdit").val(updateLastName);
         $(".modal-body #ageEdit").val(updateAge);
         $(".modal-body #emailEdit").val(updateEmail);
+        $(".modal-body #roleEdit").val(updateRoles);
 
         $("#submitEdit").on('click', function (event) {
 
-            let roles = {id: 1, name: $('#roleEdit').val()[0]};
             let user = {
                 'id': $("#idEdit").val(),
                 'firstName': $('#firstNameEdit').val(),
                 'lastName': $('#lastNameEdit').val(),
                 'age': $('#ageEdit').val(),
                 'email': $('#emailEdit').val(),
-                'password': $('#passwordEdit').val(),
-                'roles': [roles]
+                'password': updatePassword,
+                'roles': $("#roleEdit").val()
             };
             $.ajax({
                 method: 'PUT',
@@ -105,6 +108,7 @@ $(document).ready(function () {
                 data: JSON.stringify(user),
                 success: function (data) {
                     $("#editModal").modal('hide');
+                    map.clear();
                     $('#usersTable').empty();
                     showUsers(data);
                 },
@@ -150,14 +154,13 @@ $(document).ready(function () {
 $(document).ready(function () {
     $(function () {
         $("#submitAdd").on('click', function (event) {
-            let roles = {id: 1, name: $('#roleAdd').val()[0]};
             let user = {
                 'firstName': $('#firstNameAdd').val(),
                 'lastName': $('#lastNameAdd').val(),
                 'age': $('#ageAdd').val(),
                 'email': $('#emailAdd').val(),
                 'password': $('#passwordAdd').val(),
-                'roles': [roles],
+                'roles': $('#roleAdd').val()
             };
 
             $.ajax({
