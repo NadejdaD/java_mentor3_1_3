@@ -48,6 +48,7 @@ function showUsers() {
         method: 'GET',
         url: '/admin/home/',
         success: function (users) {
+            $users.empty();
             map.clear();
             $.each(users, function (i, user) {
                 map.set(user.id, user);
@@ -57,12 +58,12 @@ function showUsers() {
                     a += b.name.substr(5) + " ";
                 }
                 var rowTable = "<tr>";
-                rowTable += '<td >' + users[i].id + '</td>';
-                rowTable += '<td >' + users[i].firstName + '</td>';
-                rowTable += '<td >' + users[i].lastName + '</td>';
-                rowTable += '<td >' + users[i].age + '</td>';
-                rowTable += '<td >' + users[i].email + '</td>';
-                rowTable += '<td >' + a + '</td>';
+                rowTable += '<td>' + users[i].id + '</td>';
+                rowTable += '<td>' + users[i].firstName + '</td>';
+                rowTable += '<td>' + users[i].lastName + '</td>';
+                rowTable += '<td>' + users[i].age + '</td>';
+                rowTable += '<td>' + users[i].email + '</td>';
+                rowTable += '<td>' + a + '</td>';
                 rowTable += '<td><button data-toggle="modal" data-target="#editModal" data-id="' + users[i].id + '" class="btn btn-info btn-sm">Edit</button></td>' +
                     '<td><button data-toggle="modal" data-target="#modalDelete" data-id="' + users[i].id + '" class="btn btn-danger btn-sm">Delete</button></td></tr>';
                 $users.append(rowTable);
@@ -87,7 +88,10 @@ $(document).ready(function () {
         $(".modal-body #lastNameEdit").val(updateLastName);
         $(".modal-body #ageEdit").val(updateAge);
         $(".modal-body #emailEdit").val(updateEmail);
-        $(".modal-body #roleEdit").val(updateRoles);
+
+        // $.each(updateRoles, function (key, value) {
+        //     $('#roleEdit option[value="${value.name}"]').prop('selected', true);
+        // });
 
         $("#submitEdit").on('click', function (event) {
 
@@ -109,7 +113,7 @@ $(document).ready(function () {
                 success: function (data) {
                     $("#editModal").modal('hide');
                     map.clear();
-                    $('#usersTable').empty();
+                    // $users.empty();
                     showUsers(data);
                 },
                 error: console.log('error')
@@ -143,7 +147,7 @@ $(document).ready(function () {
                 success: function (data) {
                     $("#modalDelete").modal('hide');
                     map.clear();
-                    $users.empty()
+                    // $users.empty()
                     showUsers(data);
                 },
             });
